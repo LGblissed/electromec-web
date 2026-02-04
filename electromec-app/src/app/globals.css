@@ -1,0 +1,370 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-space-grotesk);
+  --font-brand: var(--font-montserrat);
+}
+
+:root {
+  --background: #050505;
+  --foreground: #ffffff;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  background-image: url('/carbon-fibre.png');
+  overflow-x: hidden;
+}
+
+/* =========================================
+   LOGO HACK
+   ========================================= */
+.logo-filter {
+  filter: invert(1) grayscale(100%) brightness(1.5);
+  mix-blend-mode: screen;
+  opacity: 0.9;
+}
+
+/* =========================================
+   NAV SWIPE SYSTEM
+   ========================================= */
+.nav-link-container {
+  position: relative;
+  display: inline-block;
+  height: 1.2em;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.nav-link-track {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.nav-link-container:hover .nav-link-track {
+  transform: translateY(-50%);
+}
+
+.nav-word {
+  display: block;
+  height: 1.2em;
+  line-height: 1.2em;
+  flex-shrink: 0;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: #d1d5db;
+}
+
+.nav-link-container:hover .nav-word {
+  color: white;
+}
+
+/* =========================================
+   FUGITIVE TEXT
+   ========================================= */
+.fugitive-text {
+  color: #ef4444;
+  position: relative;
+}
+
+.fugitive-text:hover {
+  animation: fugitive-glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+  text-shadow: 2px 0 #06b6d4, -2px 0 #ff00ff;
+}
+
+@keyframes fugitive-glitch {
+  0% {
+    transform: translate(0);
+    opacity: 1;
+  }
+
+  20% {
+    transform: translate(-2px, 2px);
+    opacity: 0.8;
+  }
+
+  40% {
+    transform: translate(-2px, -2px);
+    opacity: 1;
+  }
+
+  60% {
+    transform: translate(2px, 2px);
+    opacity: 0.8;
+  }
+
+  80% {
+    transform: translate(2px, -2px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(0);
+    opacity: 1;
+  }
+}
+
+/* =========================================
+   BTN ELECTRIC
+   ========================================= */
+.btn-electric {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(6, 182, 212, 0.5);
+  background: rgba(6, 182, 212, 0.05);
+  transition: all 0.5s;
+}
+
+.btn-electric:hover {
+  border-color: #a855f7;
+  background: rgba(168, 85, 247, 0.1);
+  box-shadow: 0 0 25px rgba(6, 182, 212, 0.2);
+}
+
+.btn-electric::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(6, 182, 212, 0.4) 50%, transparent 100%);
+  transform: skewX(-45deg);
+  transition: none;
+  opacity: 0;
+}
+
+.btn-electric:hover::before {
+  opacity: 1;
+  animation: static-discharge 2.5s infinite linear;
+}
+
+@keyframes static-discharge {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 200%;
+  }
+}
+
+/* =========================================
+   HERO CARDS
+   ========================================= */
+.hero-card {
+  position: relative;
+  height: 400px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.5s ease;
+}
+
+.hero-card-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.7s ease;
+  filter: grayscale(100%) brightness(0.4);
+}
+
+.hero-card:hover {
+  border-color: var(--card-color);
+  transform: translateY(-10px);
+  z-index: 10;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.hero-card:hover .hero-card-bg {
+  transform: scale(1.1);
+  filter: grayscale(0%) brightness(0.8);
+}
+
+.hero-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 2rem;
+  background: linear-gradient(to top, black, transparent);
+  transform: translateY(20px);
+  transition: transform 0.4s;
+}
+
+.hero-card:hover .hero-content {
+  transform: translateY(0);
+}
+
+/* =========================================
+   INFINITY SYMBOL
+   ========================================= */
+.infinity-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.infinity-symbol {
+  width: 50px;
+  height: 25px;
+  position: relative;
+}
+
+.infinity-symbol svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: #4b5563;
+  stroke-width: 2;
+  transition: stroke 0.3s;
+}
+
+.infinity-wrapper:hover .infinity-symbol svg {
+  stroke: white;
+}
+
+.infinity-pulse {
+  width: 6px;
+  height: 6px;
+  background: #22d3ee;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  box-shadow: 0 0 10px #22d3ee;
+  animation: flow-infinity 2s linear infinite;
+}
+
+.infinity-wrapper:hover .infinity-pulse {
+  opacity: 1;
+}
+
+@keyframes flow-infinity {
+  0% {
+    offset-distance: 0%;
+  }
+
+  100% {
+    offset-distance: 100%;
+  }
+}
+
+/* =========================================
+   BRANDS TICKER
+   ========================================= */
+.brand-text {
+  font-family: var(--font-montserrat), sans-serif;
+  font-weight: 900;
+  font-size: 1.5rem;
+  color: #444;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: default;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+}
+
+.brand-text:hover {
+  color: var(--brand-color);
+  transform: scale(1.1) rotate(-2deg);
+  text-shadow: 0 0 20px var(--brand-glow);
+}
+
+/* =========================================
+   SIDEBARS
+   ========================================= */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 400px;
+  max-width: 90%;
+  background: rgba(5, 5, 5, 0.95);
+  backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+  box-shadow: -20px 0 50px rgba(0, 0, 0, 0.9);
+}
+
+.sidebar.active {
+  transform: translateX(0);
+}
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  z-index: 90;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.scrolled-header {
+  background: rgba(5, 5, 5, 0.90);
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* =========================================
+   ANIMATIONS
+   ========================================= */
+@keyframes slide-brands {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-slide-brands {
+  animation: slide-brands 40s linear infinite;
+}
+
+/* =========================================
+   ACCESSIBILITY & UTILS
+   ========================================= */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: white;
+  padding: 8px;
+  z-index: 100;
+  transition: top 0.3s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

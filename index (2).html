@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElectroMec | Soluciones Integrales</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* =========================================
+           1. CORE SETTINGS
+           ========================================= */
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #050505; /* Void Black */
+            color: white;
+            overflow-x: hidden;
+        }
+        .font-brand { font-family: 'Montserrat', sans-serif; }
+
+        /* =========================================
+           2. LOGO HACK (Invertir JPG blanco a transparente)
+           ========================================= */
+        .logo-filter {
+            filter: invert(1) grayscale(100%) brightness(1.5); 
+            mix-blend-mode: screen; 
+            opacity: 0.9;
+        }
+
+        /* =========================================
+           3. NAV SWIPE SYSTEM (CLEAN VERSION)
+           ========================================= */
+        .nav-link-container {
+            position: relative; display: inline-block; height: 1.2em; overflow: hidden; cursor: pointer;
+        }
+        .nav-link-track {
+            display: flex; flex-direction: column; transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .nav-link-container:hover .nav-link-track {
+            transform: translateY(-50%); /* Swipe exacto */
+        }
+        .nav-word { 
+            display: block; height: 1.2em; line-height: 1.2em; flex-shrink: 0; 
+            font-weight: 700; letter-spacing: 0.15em; color: #d1d5db; /* Gris base */
+        }
+        .nav-link-container:hover .nav-word { color: white; } /* Blanco al activar */
+
+        /* Efecto FUGAZ para "OFERTAS" */
+        .fugitive-text { color: #ef4444; position: relative; }
+        .fugitive-text:hover {
+            animation: fugitive-glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            text-shadow: 2px 0 #06b6d4, -2px 0 #ff00ff;
+        }
+        @keyframes fugitive-glitch {
+            0% { transform: translate(0); opacity: 1; }
+            20% { transform: translate(-2px, 2px); opacity: 0.8; }
+            40% { transform: translate(-2px, -2px); opacity: 1; }
+            60% { transform: translate(2px, 2px); opacity: 0.8; }
+            80% { transform: translate(2px, -2px); opacity: 1; }
+            100% { transform: translate(0); opacity: 1; }
+        }
+
+        /* =========================================
+           4. BOTÓN "SLOW FLOW" (Energía Suave)
+           ========================================= */
+        .btn-electric {
+            position: relative; overflow: hidden;
+            border: 1px solid rgba(6, 182, 212, 0.5); background: rgba(6, 182, 212, 0.05);
+            transition: all 0.5s;
+        }
+        .btn-electric:hover {
+            border-color: #a855f7; background: rgba(168, 85, 247, 0.1);
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.2);
+        }
+        .btn-electric::before {
+            content: ''; position: absolute; top: 0; left: -150%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent 0%, rgba(6, 182, 212, 0.4) 50%, transparent 100%);
+            transform: skewX(-45deg); transition: none; opacity: 0;
+        }
+        .btn-electric:hover::before {
+            opacity: 1;
+            animation: static-discharge 2.5s infinite linear; /* FLOW LENTO */
+        }
+        @keyframes static-discharge { 0% { left: -100%; } 100% { left: 200%; } }
+
+        /* =========================================
+           5. HERO CARDS (3 BLOQUES)
+           ========================================= */
+        .hero-card {
+            position: relative; height: 400px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1); transition: all 0.5s ease;
+        }
+        .hero-card-bg {
+            position: absolute; inset: 0; background-size: cover; background-position: center;
+            transition: transform 0.7s ease; filter: grayscale(100%) brightness(0.4);
+        }
+        .hero-card:hover {
+            border-color: var(--card-color); transform: translateY(-10px); z-index: 10;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .hero-card:hover .hero-card-bg {
+            transform: scale(1.1); filter: grayscale(0%) brightness(0.8);
+        }
+        .hero-content {
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 2rem;
+            background: linear-gradient(to top, black, transparent);
+            transform: translateY(20px); transition: transform 0.4s;
+        }
+        .hero-card:hover .hero-content { transform: translateY(0); }
+
+        /* =========================================
+           6. INFINITY LOGO (CLEAN FIXED)
+           ========================================= */
+        .infinity-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .infinity-symbol {
+            width: 50px;
+            height: 25px;
+            position: relative;
+        }
+        .infinity-symbol svg {
+            width: 100%;
+            height: 100%;
+        }
+        .infinity-path {
+            fill: #4b5563; /* Grey base - filled shape */
+            transition: fill 0.4s ease;
+        }
+        .infinity-wrapper:hover .infinity-path {
+            fill: white;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.3));
+        }
+        .infinity-text {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            transition: color 0.4s ease;
+        }
+        .infinity-wrapper:hover .infinity-text {
+            color: white;
+        }
+
+        /* =========================================
+           7. BRANDS SLIDING TICKER (FIXED)
+           ========================================= */
+        .brands-container {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+        }
+        .brands-track {
+            display: flex;
+            align-items: center;
+            gap: 5rem;
+            animation: slide-brands 40s linear infinite;
+            will-change: transform;
+        }
+        .brands-track:hover {
+            animation-play-state: paused;
+        }
+        @keyframes slide-brands {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .brand-text {
+            font-family: 'Montserrat', sans-serif; 
+            font-weight: 900; 
+            font-size: 1.8rem; 
+            color: #444;
+            transition: all 0.5s ease;
+            cursor: default; /* Remove clickable cursor */
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+        .brand-text:hover {
+            color: var(--brand-color); 
+            text-shadow: 0 0 20px var(--brand-glow);
+        }
+
+        /* =========================================
+           8. UTILS & SIDEBARS
+           ========================================= */
+        .sidebar {
+            position: fixed; top: 0; right: 0; height: 100vh; width: 400px; max-width: 90%;
+            background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100; box-shadow: -20px 0 50px rgba(0,0,0,0.9);
+        }
+        .sidebar.active { transform: translateX(0); }
+        
+        .sidebar-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px);
+            z-index: 90; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
+        
+        .scrolled-header {
+            background: rgba(5, 5, 5, 0.90); padding-top: 0.75rem !important; padding-bottom: 0.75rem !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]">
+
+    <div id="overlay" class="sidebar-overlay" onclick="closeAllSidebars()"></div>
+
+    <header id="main-header" class="fixed w-full top-0 z-50 transition-all duration-500 py-8 px-6 lg:px-12 flex justify-between items-center border-b border-transparent">
+        
+        <nav class="hidden lg:flex gap-8 text-xs uppercase items-center">
+            <div class="nav-link-container">
+                <div class="nav-link-track">
+                    <span class="nav-word">Iluminación</span>
+                    <span class="nav-word">Decoración</span>
+                </div>
+            </div>
+            <div class="nav-link-container">
+                <div class="nav-link-track">
+                    <span class="nav-word">Herramientas</span>
+                    <span class="nav-word">Motores</span>
+                </div>
+            </div>
+            <div class="cursor-pointer text-gray-300 hover:text-white transition tracking-widest font-bold text-xs">ELECTRICIDAD</div>
+            <div class="fugitive-text cursor-pointer tracking-widest flex items-center gap-1 font-bold text-xs">
+                <i data-lucide="zap" class="w-3 h-3"></i> OFERTAS
+            </div>
+        </nav>
+
+        <div class="absolute left-1/2 transform -translate-x-1/2">
+            <img id="brand-logo-img" src="electromeclogo.jpg" alt="ElectroMec" class="h-20 w-auto transition-all duration-500 logo-filter">
+        </div>
+
+        <div class="flex items-center gap-6">
+            <div class="relative group hidden xl:block">
+                <input type="text" placeholder="Buscar..." class="bg-transparent border-b border-gray-700 text-white w-24 group-hover:w-48 focus:w-56 focus:border-cyan-500 transition-all duration-300 outline-none text-xs pb-1 placeholder-gray-600 text-right pr-6">
+                <i data-lucide="search" class="w-4 h-4 text-gray-500 absolute right-0 bottom-2 pointer-events-none group-hover:text-white transition"></i>
+            </div>
+            <a href="https://wa.me/5492395450285" target="_blank" class="btn-electric hidden md:flex items-center gap-2 text-cyan-400 text-[10px] font-bold px-6 py-3 rounded uppercase tracking-wider">
+                Pedir Presupuesto
+            </a>
+            <div class="flex gap-5 border-l border-gray-800 pl-6">
+                <i onclick="openSidebar('login-sidebar')" data-lucide="user" class="w-5 h-5 text-gray-400 hover:text-white cursor-pointer transition"></i>
+                <div class="relative group" onclick="openSidebar('cart-sidebar')">
+                    <i data-lucide="shopping-cart" class="w-5 h-5 text-gray-400 group-hover:text-white cursor-pointer transition"></i>
+                    <span class="absolute -top-2 -right-2 bg-red-600 text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center ring-2 ring-black">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="min-h-screen pt-32 pb-20 px-4 md:px-12 flex flex-col justify-center relative">
+        <canvas id="canvas" class="absolute inset-0 z-[-1] opacity-20"></canvas>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto w-full z-10 mb-20">
+            <div class="hero-card rounded-2xl bg-gray-900 group" style="--card-color: #ef4444;">
+                <div class="hero-card-bg bg-[url('https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=1470&auto=format&fit=crop')]"></div>
+                <div class="hero-content">
+                    <h3 class="font-brand text-3xl font-black text-white italic">HERRAMIENTAS</h3>
+                    <p class="text-red-400 text-xs tracking-widest uppercase mt-2 group-hover:translate-x-2 transition">Potencia Industrial -></p>
+                </div>
+            </div>
+            <div class="hero-card rounded-2xl bg-gray-900 group" style="--card-color: #06b6d4;">
+                <div class="hero-card-bg bg-[url('https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?q=80&w=1335&auto=format&fit=crop')]"></div>
+                <div class="hero-content">
+                    <h3 class="font-brand text-3xl font-black text-white italic">ILUMINACIÓN</h3>
+                    <p class="text-cyan-400 text-xs tracking-widest uppercase mt-2 group-hover:translate-x-2 transition">Diseño & Eficiencia -></p>
+                </div>
+            </div>
+            <div class="hero-card rounded-2xl bg-gray-900 group" style="--card-color: #3b82f6;">
+                <div class="hero-card-bg bg-[url('https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=1469&auto=format&fit=crop')]"></div>
+                <div class="hero-content">
+                    <h3 class="font-brand text-3xl font-black text-white italic">ELECTRICIDAD</h3>
+                    <p class="text-blue-400 text-xs tracking-widest uppercase mt-2 group-hover:translate-x-2 transition">Infraestructura Segura -></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-3xl mx-auto text-center relative z-10">
+            <h4 class="text-gray-600 text-xs tracking-[0.6em] mb-6 uppercase">Sobre Nosotros</h4>
+            <p class="text-xl md:text-2xl text-gray-300 font-light leading-relaxed font-brand">
+                <span class="text-cyan-500 font-bold">Electromec</span> es una empresa de <span class="text-white">Carlos Casares</span> dedicada a la comercialización de materiales eléctricos, iluminación e insumos para obra, industria y hogar. Trabajamos con marcas líderes del mercado y ofrecemos asesoramiento técnico para cada proyecto.
+            </p>
+            <a href="/cdn-cgi/l/email-protection#9aecfff4eefbe9dafff6fff9eee8f5f7fff9b4f9f5f7b4fbe8" class="inline-block mt-6 text-cyan-700 hover:text-cyan-400 transition border-b border-cyan-900 pb-1 text-sm tracking-wide">
+                <span class="__cf_email__" data-cfemail="95e3f0fbe1f4e6d5f0f9f0f6e1e7faf8f0f6bbf6faf8bbf4e7">[email&#160;protected]</span>
+            </a>
+            <div class="h-1 w-20 bg-gradient-to-r from-transparent via-red-600 to-transparent mx-auto mt-12 opacity-50"></div>
+        </div>
+    </section>
+
+    <section class="py-24 border-t border-gray-900 bg-black/40">
+        <div class="brands-container">
+            <div class="brands-track">
+                <!-- First set of brands -->
+                <div class="brand-text" style="--brand-color: #007a33; --brand-glow: rgba(0,122,51,0.4)">SCHNEIDER</div>
+                <div class="brand-text" style="--brand-color: #84cc16; --brand-glow: rgba(132,204,22,0.4)">GENROD</div>
+                <div class="brand-text" style="--brand-color: #f97316; --brand-glow: rgba(249,115,22,0.4)">JADEVER</div>
+                <div class="brand-text" style="--brand-color: #00EEFF; --brand-glow: rgba(0,238,255,0.4)">MACROLED</div>
+                <div class="brand-text" style="--brand-color: #E30613; --brand-glow: rgba(227,6,19,0.4)">MOTORARG</div>
+                <div class="brand-text" style="--brand-color: #1d4ed8; --brand-glow: rgba(29,78,216,0.4)">CHINT</div>
+                <div class="brand-text" style="--brand-color: #3b82f6; --brand-glow: rgba(59,130,246,0.4)">PRYSMIAN</div>
+                <div class="brand-text" style="--brand-color: #38bdf8; --brand-glow: rgba(56,189,248,0.4)">ARGENPLAS</div>
+                <div class="brand-text" style="--brand-color: #9ca3af; --brand-glow: rgba(156,163,175,0.4)">MEC</div>
+                
+                <!-- Duplicate set for seamless loop -->
+                <div class="brand-text" style="--brand-color: #007a33; --brand-glow: rgba(0,122,51,0.4)">SCHNEIDER</div>
+                <div class="brand-text" style="--brand-color: #84cc16; --brand-glow: rgba(132,204,22,0.4)">GENROD</div>
+                <div class="brand-text" style="--brand-color: #f97316; --brand-glow: rgba(249,115,22,0.4)">JADEVER</div>
+                <div class="brand-text" style="--brand-color: #00EEFF; --brand-glow: rgba(0,238,255,0.4)">MACROLED</div>
+                <div class="brand-text" style="--brand-color: #E30613; --brand-glow: rgba(227,6,19,0.4)">MOTORARG</div>
+                <div class="brand-text" style="--brand-color: #1d4ed8; --brand-glow: rgba(29,78,216,0.4)">CHINT</div>
+                <div class="brand-text" style="--brand-color: #3b82f6; --brand-glow: rgba(59,130,246,0.4)">PRYSMIAN</div>
+                <div class="brand-text" style="--brand-color: #38bdf8; --brand-glow: rgba(56,189,248,0.4)">ARGENPLAS</div>
+                <div class="brand-text" style="--brand-color: #9ca3af; --brand-glow: rgba(156,163,175,0.4)">MEC</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 px-6 lg:px-12 max-w-7xl mx-auto border-t border-gray-900/50">
+        <div class="flex justify-between items-end mb-12">
+            <div>
+                <h3 class="text-3xl font-bold text-white mb-2">Destacados <span class="text-red-600">.</span></h3>
+                <p class="text-gray-400 text-sm">Stock permanente y entrega inmediata.</p>
+            </div>
+            <a href="#" class="text-cyan-400 text-sm hover:underline font-bold">Ver catálogo completo -></a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-[600px]">
+            <div class="md:col-span-2 relative group overflow-hidden rounded-2xl bg-gray-900 border border-gray-800 cursor-pointer">
+                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?q=80&w=2070')] bg-cover bg-center opacity-50 group-hover:opacity-70 transition duration-700 group-hover:scale-105"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                <div class="absolute bottom-0 left-0 p-10 w-full">
+                    <span class="bg-cyan-600 text-white text-[10px] font-bold px-3 py-1 rounded-full mb-4 inline-block">INDUSTRIAL</span>
+                    <h4 class="text-3xl font-bold text-white mb-2">Reflectores High-Bay</h4>
+                    <p class="text-gray-300 text-sm max-w-lg">Eficiencia energética para grandes superficies y galpones.</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-6">
+                <div class="flex-1 relative group overflow-hidden rounded-2xl bg-gray-900 border border-gray-800 cursor-pointer">
+                    <div class="absolute inset-0 bg-gradient-to-br from-gray-800 to-black p-6 flex flex-col justify-between group-hover:border-red-500/30 border border-transparent transition">
+                        <div class="self-end"><span class="bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded">HOT</span></div>
+                        <div>
+                            <h4 class="text-xl font-bold text-white">Jadever Pro</h4>
+                            <p class="text-xs text-gray-400">Kit Profesional 1000V</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-1 relative group overflow-hidden rounded-2xl bg-gray-900 border border-gray-800 cursor-pointer">
+                     <div class="absolute inset-0 bg-gradient-to-br from-gray-800 to-black p-6 flex flex-col justify-between group-hover:border-cyan-500/30 border border-transparent transition">
+                        <div class="self-end"><span class="bg-cyan-900 text-cyan-400 text-[10px] font-bold px-2 py-1 rounded border border-cyan-700">NEW</span></div>
+                        <div>
+                            <h4 class="text-xl font-bold text-white">Domótica Wiser</h4>
+                            <p class="text-xs text-gray-400">Control inteligente Schneider</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-[#020202] pt-20 pb-10 text-sm border-t border-gray-900 relative">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
+            <div class="space-y-6">
+                <img src="electromeclogo.jpg" class="h-8 logo-filter opacity-50">
+                <ul class="text-gray-400 space-y-4">
+                    <li>
+                        <a href="https://share.google/TlU85npg7Rx8XUvH4" target="_blank" class="flex gap-3 items-start group hover:text-white transition">
+                            <div class="p-2 bg-gray-900 rounded-full group-hover:bg-cyan-900 transition">
+                                <i data-lucide="map-pin" class="w-4 h-4 text-cyan-600 group-hover:text-cyan-300"></i>
+                            </div>
+                            <span>Maipú 171, Carlos Casares<br><span class="text-xs text-gray-600 group-hover:text-gray-400">Ver en Mapa -></span></span>
+                        </a>
+                    </li>
+                    <li class="flex gap-3 items-center">
+                        <i data-lucide="phone" class="w-4 h-4 text-cyan-700"></i>
+                        <span>2395 45-0285</span>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-white font-bold mb-6 text-xs tracking-widest uppercase">Social</h5>
+                <div class="flex gap-4">
+                    <a href="https://www.instagram.com/electromec_" target="_blank" class="p-3 bg-gray-900 rounded hover:text-white text-gray-400 transition border border-gray-800 hover:border-pink-500"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                    <a href="https://www.facebook.com/Electromec.CC" target="_blank" class="p-3 bg-gray-900 rounded hover:text-white text-gray-400 transition border border-gray-800 hover:border-blue-600"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                </div>
+            </div>
+            <div class="md:col-span-2">
+                <h5 class="text-white font-bold mb-6 text-xs tracking-widest uppercase">Newsletter</h5>
+                <form class="flex gap-2">
+                    <input type="email" placeholder="Email corporativo" class="bg-gray-900 border border-gray-800 text-white px-4 py-3 w-full rounded focus:border-cyan-600 outline-none transition">
+                    <button class="bg-cyan-800 text-white px-6 py-3 rounded hover:bg-cyan-700 font-bold transition uppercase text-xs tracking-wider">Enviar</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-900 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center px-6 max-w-7xl mx-auto text-gray-600 text-xs">
+            <p>© 2026 ElectroMec. Todos los derechos reservados.</p>
+            
+            <div class="mt-4 md:mt-0 flex items-center justify-center cursor-default infinity-wrapper">
+                <div class="infinity-symbol">
+                    <svg viewBox="0 0 640 512" xmlns="http://www.w3.org/2000/svg">
+                        <path class="infinity-path" d="M0 241.1C0 161 65 96 145.1 96c38.5 0 75.4 15.3 102.6 42.5L320 210.7l72.2-72.2C419.5 111.3 456.4 96 494.9 96C575 96 640 161 640 241.1v29.7C640 351 575 416 494.9 416c-38.5 0-75.4-15.3-102.6-42.5L320 301.3l-72.2 72.2C220.5 400.7 183.6 416 145.1 416C65 416 0 351 0 270.9V241.1zM274.7 256l-72.2-72.2c-15.2-15.2-35.9-23.8-57.4-23.8C100.3 160 64 196.3 64 241.1v29.7c0 44.8 36.3 81.1 81.1 81.1c21.5 0 42.2-8.5 57.4-23.8L274.7 256zm90.5 0l72.2 72.2c15.2 15.2 35.9 23.8 57.4 23.8c44.8 0 81.1-36.3 81.1-81.1V241.1c0-44.8-36.3-81.1-81.1-81.1c-21.5 0-42.2 8.5-57.4 23.8L365.3 256z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/5492395450285" target="_blank" class="fixed bottom-8 right-8 bg-black border border-[#25D366] p-4 rounded-full shadow-[0_0_15px_rgba(37,211,102,0.3)] hover:scale-110 hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 cursor-pointer z-50 group flex items-center justify-center">
+        <div class="relative w-8 h-8">
+            <i data-lucide="message-circle" class="w-8 h-8 text-[#25D366] absolute inset-0"></i>
+            <i data-lucide="phone" class="w-4 h-4 text-[#25D366] absolute inset-0 m-auto fill-current"></i>
+        </div>
+    </a>
+
+    <aside id="login-sidebar" class="sidebar p-8 flex flex-col">
+        <div class="flex justify-between items-center mb-10"><h3 class="text-2xl font-bold tracking-tight text-white">Login</h3><button onclick="closeAllSidebars()" class="text-gray-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button></div>
+        <form class="space-y-6">
+            <div>
+                <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Email</label>
+                <input type="email" placeholder="tu@email.com" class="w-full bg-gray-900 border border-gray-700 rounded p-3 text-white focus:border-cyan-500 outline-none">
+            </div>
+            <div>
+                <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Contraseña</label>
+                <input type="password" placeholder="••••••••" class="w-full bg-gray-900 border border-gray-700 rounded p-3 text-white focus:border-cyan-500 outline-none">
+            </div>
+            <button class="w-full bg-cyan-700 hover:bg-cyan-600 text-white font-bold py-3 rounded transition">ENTRAR</button>
+        </form>
+    </aside>
+
+    <aside id="cart-sidebar" class="sidebar p-8 flex flex-col">
+        <div class="flex justify-between items-center mb-8"><h3 class="text-2xl font-bold tracking-tight text-white">Carrito</h3><button onclick="closeAllSidebars()" class="text-gray-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button></div>
+        <div class="flex-1 overflow-y-auto space-y-6">
+            <div class="flex gap-4 border-b border-gray-800 pb-4">
+                <div class="w-20 h-20 bg-white rounded flex items-center justify-center p-2">
+                    <img src="macroled.png" class="max-w-full max-h-full object-contain filter contrast-125">
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-sm font-bold text-white leading-tight">REFLECTOR MACROLED 100W</h4>
+                    <p class="text-xs text-gray-400 mt-1">Luz Fría / Exterior</p>
+                    <div class="flex justify-between items-center mt-3">
+                        <span class="text-xs text-gray-500">Cant: 1</span>
+                        <span class="text-cyan-400 font-bold">$82.280</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-6 border-t border-gray-800 pt-6">
+            <button class="w-full bg-white text-black font-bold py-4 rounded transition hover:bg-gray-200">INICIAR COMPRA</button>
+        </div>
+    </aside>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        lucide.createIcons();
+        window.addEventListener('scroll', () => { const h=document.getElementById('main-header'), l=document.getElementById('brand-logo-img'); window.scrollY>50?(h.classList.add('scrolled-header'),h.classList.remove('py-8'),l.classList.remove('h-20'),l.classList.add('h-10')):(h.classList.remove('scrolled-header'),h.classList.add('py-8'),l.classList.remove('h-10'),l.classList.add('h-20'))});
+        function openSidebar(id){closeAllSidebars();document.getElementById(id).classList.add('active');document.getElementById('overlay').classList.add('active')}
+        function closeAllSidebars(){document.querySelectorAll('.sidebar').forEach(e=>e.classList.remove('active'));document.getElementById('overlay').classList.remove('active')}
+        const canvas = document.getElementById('canvas'), ctx = canvas.getContext('2d');
+        let particles = [];
+        function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight} window.addEventListener('resize', resize); resize();
+        class Particle{constructor(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.size=Math.random()*1.5;this.spX=Math.random()*0.4-0.2;this.spY=Math.random()*0.4-0.2}update(){this.x+=this.spX;this.y+=this.spY;if(this.x>canvas.width)this.x=0;if(this.x<0)this.x=canvas.width;if(this.y>canvas.height)this.y=0;if(this.y<0)this.y=canvas.height}draw(){ctx.fillStyle='rgba(6,182,212,0.3)';ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill()}}
+        function init(){parti

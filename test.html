@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElectroMec | Soluciones Integrales</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        'void': '#050505',
+                        'neon-cyan': '#06b6d4',
+                        'neon-purple': '#a855f7',
+                        'neon-red': '#ef4444',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* =========================================
+           1. CORE SETTINGS (From page.html)
+           ========================================= */
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #050505; /* Void Black */
+            color: white;
+            overflow-x: hidden;
+        }
+        .font-brand { font-family: 'Montserrat', sans-serif; }
+
+        /* =========================================
+           2. LOGO HACK (Invertir JPG blanco a transparente)
+           ========================================= */
+        .logo-filter {
+            filter: invert(1) grayscale(100%) brightness(1.5); 
+            mix-blend-mode: screen; 
+            opacity: 0.9;
+        }
+
+        /* =========================================
+           3. NAV SWIPE SYSTEM (From page.html)
+           ========================================= */
+        .nav-link-container {
+            position: relative; display: inline-block; height: 1.2em; overflow: hidden; cursor: pointer;
+        }
+        .nav-link-track {
+            display: flex; flex-direction: column; transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .nav-link-container:hover .nav-link-track {
+            transform: translateY(-50%); /* Swipe exacto */
+        }
+        .nav-word { 
+            display: block; height: 1.2em; line-height: 1.2em; flex-shrink: 0; 
+            font-weight: 700; letter-spacing: 0.15em; color: #d1d5db; /* Gris base */
+        }
+        .nav-link-container:hover .nav-word { color: white; } /* Blanco al activar */
+
+        /* Efecto FUGAZ para "OFERTAS" (From page.html) */
+        .fugitive-text { color: #ef4444; position: relative; }
+        .fugitive-text:hover {
+            animation: fugitive-glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            text-shadow: 2px 0 #06b6d4, -2px 0 #ff00ff;
+        }
+        @keyframes fugitive-glitch {
+            0% { transform: translate(0); opacity: 1; }
+            20% { transform: translate(-2px, 2px); opacity: 0.8; }
+            40% { transform: translate(-2px, -2px); opacity: 1; }
+            60% { transform: translate(2px, 2px); opacity: 0.8; }
+            80% { transform: translate(2px, -2px); opacity: 1; }
+            100% { transform: translate(0); opacity: 1; }
+        }
+
+        /* =========================================
+           4. BOTÓN "SLOW FLOW" (Energía Suave)
+           ========================================= */
+        .btn-electric {
+            position: relative; overflow: hidden; 
+            border: 1px solid rgba(6, 182, 212, 0.5); 
+            background: rgba(6, 182, 212, 0.05); 
+            transition: all 0.5s;
+        }
+        .btn-electric:hover {
+            border-color: #a855f7;
+            background: rgba(168, 85, 247, 0.1);
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.2);
+        }
+
+        /* =========================================
+           5. HERO IMAGES GLITCH (The Effect You Liked)
+           ========================================= */
+        .hero-img-container {
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-img-container:hover .glitch-img {
+            opacity: 0.8;
+            transform: scale(1.05);
+            filter: contrast(1.2) brightness(1.1);
+        }
+        .hero-title-overlay {
+            mix-blend-mode: overlay;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+        .hero-img-container:hover .hero-title-overlay {
+            opacity: 1;
+            text-shadow: 4px 4px 0px rgba(0,0,0,0.5);
+            transform: translateX(10px);
+        }
+
+        /* =========================================
+           6. BRANDS CAROUSEL (Clean, No White Box)
+           ========================================= */
+        .brand-track {
+            display: flex;
+            width: fit-content;
+            animation: slide-brands 30s linear infinite;
+        }
+        @keyframes slide-brands {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .brand-item {
+            flex-shrink: 0;
+            padding: 0 3rem;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+            filter: grayscale(100%) brightness(2); /* Makes logos white/grey */
+        }
+        .brand-item:hover {
+            opacity: 1;
+            filter: grayscale(0%) brightness(1); /* Color on hover */
+        }
+    </style>
+</head>
+<body class="bg-void min-h-screen selection:bg-neon-cyan selection:text-black">
+
+    <canvas id="particles" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-40"></canvas>
+
+    <header class="fixed top-0 w-full z-50 bg-void/80 backdrop-blur-md border-b border-white/10 transition-all duration-300" id="main-header">
+        <div class="max-w-[1800px] mx-auto px-6 h-24 flex justify-between items-center">
+            
+            <div class="flex items-center gap-4 group cursor-pointer">
+                <div class="relative w-12 h-12">
+                   <svg viewBox="0 0 100 50" class="w-full h-full text-neon-cyan drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]">
+                        <path d="M25,25 C25,40 5,40 5,25 C5,10 25,10 25,25 C25,40 75,40 75,25 C75,10 95,10 95,25 C95,40 75,40 75,25 C75,10 25,10 25,25 Z" 
+                              fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                              class="path-infinity"/>
+                    </svg>
+                </div>
+                
+                <div class="flex flex-col">
+                    <h1 class="font-display font-bold text-3xl tracking-tighter leading-none text-white group-hover:text-neon-cyan transition-colors">
+                        ELECTRO<span class="text-neon-cyan">MEC</span>
+                    </h1>
+                    <span class="text-[10px] tracking-[0.4em] text-gray-400 uppercase">Ingeniería & Diseño</span>
+                </div>
+            </div>
+
+            <nav class="hidden md:flex gap-12 items-center">
+                <div class="nav-link-container">
+                    <div class="nav-link-track">
+                        <span class="nav-word">PRODUCTOS</span>
+                        <span class="nav-word text-neon-cyan">CATÁLOGO</span>
+                    </div>
+                </div>
+                <div class="nav-link-container">
+                    <div class="nav-link-track">
+                        <span class="nav-word">NOSOTROS</span>
+                        <span class="nav-word text-neon-cyan">EQUIPO</span>
+                    </div>
+                </div>
+                <a href="#" class="font-bold tracking-widest text-sm fugitive-text">
+                    OFERTAS <span class="text-[10px] align-top">⚡</span>
+                </a>
+            </nav>
+
+            <button class="hidden md:block btn-electric px-8 py-3 rounded-sm font-bold tracking-wider text-sm text-neon-cyan hover:text-white uppercase">
+                Pedir Presupuesto
+            </button>
+
+            <button class="md:hidden text-white" onclick="openMobileMenu()">
+                <i data-lucide="menu" class="w-8 h-8"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="relative z-10 pt-32 pb-12 px-4 max-w-[1800px] mx-auto">
+        
+        <div class="mb-8 pl-2 border-l-4 border-neon-cyan">
+            <h2 class="font-brand font-bold text-sm text-neon-cyan tracking-[0.2em] mb-2">SOLUCIONES INDUSTRIALES</h2>
+            <h1 class="font-display text-5xl md:text-7xl font-bold uppercase leading-none">
+                INGENIERÍA <br> <span class="text-gray-500">EN MOVIMIENTO</span>
+            </h1>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-1 h-[600px] md:h-[650px]">
+            
+            <div class="hero-img-container relative h-full w-full group cursor-pointer border border-white/5 bg-gray-900">
+                <img src="https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?q=80&w=1000&auto=format&fit=crop" 
+                     class="glitch-img w-full h-full object-cover transition-all duration-700 opacity-60 grayscale group-hover:grayscale-0" alt="Iluminación">
+                <div class="absolute bottom-0 left-0 p-8 w-full bg-gradient-to-t from-black via-black/50 to-transparent">
+                    <h3 class="hero-title-overlay font-display text-4xl md:text-5xl font-bold text-white mb-2">ILUMINACIÓN</h3>
+                    <p class="text-gray-400 text-sm font-mono opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-4 group-hover:translate-y-0">
+                        > INDUSTRIAL & DECORATIVA
+                    </p>
+                </div>
+            </div>
+
+            <div class="hero-img-container relative h-full w-full group cursor-pointer border-x border-white/5 bg-gray-900">
+                <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a782?q=80&w=1000&auto=format&fit=crop" 
+                     class="glitch-img w-full h-full object-cover transition-all duration-700 opacity-60 grayscale group-hover:grayscale-0" alt="Herramientas">
+                <div class="absolute bottom-0 left-0 p-8 w-full bg-gradient-to-t from-black via-black/50 to-transparent">
+                    <h3 class="hero-title-overlay font-display text-4xl md:text-5xl font-bold text-white mb-2">HERRAMIENTAS</h3>
+                    <p class="text-gray-400 text-sm font-mono opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-4 group-hover:translate-y-0">
+                        > MAKITA / BOSCH / DEWALT
+                    </p>
+                </div>
+            </div>
+
+            <div class="hero-img-container relative h-full w-full group cursor-pointer border border-white/5 bg-gray-900">
+                <img src="https://images.unsplash.com/photo-1616423640778-28d1b53229bd?q=80&w=1000&auto=format&fit=crop" 
+                     class="glitch-img w-full h-full object-cover transition-all duration-700 opacity-60 grayscale group-hover:grayscale-0" alt="Electricidad">
+                <div class="absolute bottom-0 left-0 p-8 w-full bg-gradient-to-t from-black via-black/50 to-transparent">
+                    <h3 class="hero-title-overlay font-display text-4xl md:text-5xl font-bold text-white mb-2">ELECTRICIDAD</h3>
+                    <p class="text-gray-400 text-sm font-mono opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-4 group-hover:translate-y-0">
+                        > CABLES / TABLEROS / MOTORES
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4 h-[250px]">
+             <div class="relative group border border-white/10 overflow-hidden cursor-pointer">
+                <div class="absolute top-2 right-2 bg-neon-red text-black text-xs font-bold px-2 py-1 z-20">OFERTA</div>
+                <img src="https://images.unsplash.com/photo-1572981779307-38b8cabb2407?q=80&w=500&auto=format&fit=crop" class="w-full h-full object-cover opacity-70 group-hover:scale-110 transition-transform duration-500">
+                <div class="absolute bottom-0 left-0 p-4 w-full bg-black/80 backdrop-blur-sm">
+                    <p class="text-neon-cyan font-mono text-xs">SKU: 8842</p>
+                    <p class="font-bold text-white">SET DESTORNILLADORES</p>
+                </div>
+             </div>
+             <div class="relative group border border-white/10 overflow-hidden cursor-pointer">
+                <div class="absolute top-2 right-2 bg-neon-red text-black text-xs font-bold px-2 py-1 z-20">-15%</div>
+                <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=500&auto=format&fit=crop" class="w-full h-full object-cover opacity-70 group-hover:scale-110 transition-transform duration-500">
+                <div class="absolute bottom-0 left-0 p-4 w-full bg-black/80 backdrop-blur-sm">
+                    <p class="text-neon-cyan font-mono text-xs">SKU: 1024</p>
+                    <p class="font-bold text-white">CABLES 2.5mm</p>
+                </div>
+             </div>
+             <div class="col-span-2 bg-gray-900 border border-white/10 flex items-center justify-center p-8 text-center relative overflow-hidden group">
+                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
+                <div class="relative z-10">
+                    <h4 class="text-2xl font-bold text-white mb-2">ENVÍOS A TODO EL PAÍS</h4>
+                    <p class="text-gray-400 text-sm">Logística especializada para grandes obras.</p>
+                    <button class="mt-4 text-neon-cyan text-xs font-bold uppercase tracking-widest border-b border-neon-cyan pb-1">Ver Cobertura</button>
+                </div>
+             </div>
+        </div>
+
+    </main>
+
+    <section class="border-y border-white/10 py-10 bg-black overflow-hidden relative z-20">
+        <div class="brand-track flex items-center">
+            <div class="flex items-center gap-16 px-16">
+                <span class="brand-item text-2xl font-bold text-gray-500">MACROLED</span>
+                <span class="brand-item text-2xl font-bold text-gray-500">CHINT</span>
+                <span class="brand-item text-2xl font-bold text-gray-500">GENROD</span>
+                <span class="brand-item text-2xl font-bold text-gray-500">SCHNEIDER</span>
+                <span class="brand-item text-2xl font-bold text-gray-500">JADEVER</span>
+                <span class="brand-item text-2xl font-bold text-gray-500">ARGENPLAS</span>
+                <span class="brand-item text-2xl font-bold text-gray-500">PRYSMIAN</span> <span class="brand-item text-2xl font-bold text-gray-500">PHILIPS</span>
+            </div>
+            <div class="flex items-center gap-16 px-16">
+                <span class="brand-item text-2xl font-bold text-gray-500">MACROLED</span>
+                <span class="brand-item text-2xl font-bold text-gray-500">CHINT</span>
+                <span class="brand-item text-2xl font-bold text-gray-500">GENROD</span>
+                <span class="brand-item text-2xl font-bold text-gray-500">SCHNEIDER</span>
+                <span class="brand-item text-2xl font-bold text-gray-500">JADEVER</span>
+                <span class="brand-item text-2xl font-bold text-gray-500">ARGENPLAS</span>
+                <span class="brand-item text-2xl font-bold text-gray-500">PRYSMIAN</span>
+                <span class="brand-item text-2xl font-bold text-gray-500">PHILIPS</span>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        lucide.createIcons();
+
+        // PARTICLE SYSTEM (Optimized for performance)
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        function resize(){
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor(){
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5;
+                this.speedX = (Math.random() - 0.5) * 0.5; // Very slow drift
+                this.speedY = (Math.random() - 0.5) * 0.5;
+            }
+            update(){
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if(this.x > canvas.width) this.x = 0;
+                if(this.x < 0) this.x = canvas.width;
+                if(this.y > canvas.height) this.y = 0;
+                if(this.y < 0) this.y = canvas.height;
+            }
+            draw(){
+                ctx.fillStyle = 'rgba(6,182,212,0.3)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles(){
+            particles = [];
+            // Reduced count: 30 particles is enough for the vibe without lag
+            for(let i=0; i<30; i++) particles.push(new Particle());
+        }
+
+        function animate(){
+            ctx.clearRect(0,0, canvas.width, canvas.height);
+            for(let i=0; i<particles.length; i++){
+                particles[i].update();
+                particles[i].draw();
+                // Draw connections
+                for(let j=i; j<particles.length; j++){
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx*dx + dy*dy);
+                    if(distance < 100){
+                        ctx.strokeStyle = `rgba(6,182,212,${0.2 - distance/500})`; // Faint lines
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        initParticles();
+        animate();
+    </script>
+</body>
+</html>
